@@ -18,6 +18,7 @@
         .info-grid { display: grid; grid-template-columns: 1fr 2fr; gap: .75rem; font-size: .9rem; border-top: 1px solid #e2e8f0; padding-top: 1rem; }
         .info-grid .label { color: #64748b; font-weight: 500; }
         .loading { text-align: center; padding: 3rem; color: #64748b; }
+        .warning-banner { color: #b91c1c; background: #fef2f2; padding: 10px; margin-top: 15px; border-radius: 6px; font-size: 0.85rem; border: 1px solid #fca5a5; }
     </style>
 </head>
 <body>
@@ -29,6 +30,7 @@
     <div class="card">
         <h1>Welcome, <span id="welcomeName">User</span>!</h1>
         <div id="loading" class="loading">Loading user profile information...</div>
+
         <div id="userInfo" class="info-grid" style="display:none">
             <span class="label">User ID:</span><span id="uid"></span>
             <span class="label">Full Name:</span><span id="uname"></span>
@@ -40,21 +42,49 @@
 <script>
     (async function() {
         const token = localStorage.getItem('token');
-        if (!token) { window.location.href = '/login.html'; return; }
+        const savedUser = localStorage.getItem('user');
 
-        const data = await apiCall('/me');
-        if (!data || data.error) {
-            logout();
+        if (!token) {
+            window.location.href = '/login.html';
             return;
         }
 
+        // Hit profile resource relative path context
+        const data = await apiCall('/api/users/me');
+
+        // Safe Fallback Strategy: If API falls into a 404/403 condition,
+        // display cached login values instead of immediately loop-redirecting.
+        if (!data || data.error) {
+            console.warn("Profile fetching failed. Reading storage cache backup...");
+            document.getElementById('loading').style.display = 'none';
+
+            if (savedUser) {
+                const userObj = JSON.parse(savedUser);
+                document.getElementById('userInfo').style.display = 'grid';
+                document.getElementById('welcomeName').textContent = userObj.fullName || userObj.name || "User";
+                document.getElementById('uid').textContent = userObj.id || "N/A";
+                document.getElementById('uname').textContent = userObj.fullName || userObj.name || "N/A";
+                document.getElementById('uemail').textContent = userObj.email || "N/A";
+
+                const banner = document.createElement('div');
+                banner.className = "warning-banner";
+                banner.innerHTML = `<strong>Notice:</strong> Profile synchronization issue (${data?.error || 'Endpoint connection failed'}).`;
+                document.querySelector('.card').appendChild(banner);
+            } else {
+                logout();
+            }
+            return;
+        }
+
+        // Normal render state if apiCall is completely successful
         document.getElementById('loading').style.display = 'none';
         document.getElementById('userInfo').style.display = 'grid';
 
-        document.getElementById('welcomeName').textContent = data.name;
-        document.getElementById('uid').textContent = data.id;
-        document.getElementById('uname').textContent = data.name;
-        document.getElementById('uemail').textContent = data.email;
+        const displayName = data.fullName || data.name || "User";
+        document.getElementById('welcomeName').textContent = displayName;
+        document.getElementById('uid').textContent = data.id || "N/A";
+        document.getElementById('uname').textContent = displayName;
+        document.getElementById('uemail').textContent = data.email || "N/A";
     })();
 </script>
 </body>

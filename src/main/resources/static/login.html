@@ -16,9 +16,6 @@
         .error { color: #dc2626; font-size: .8rem; margin-bottom: 1rem; display: none; background: #fef2f2; padding: 0.5rem; border-radius: 6px; border: 1px solid #fca5a5; }
         button { width: 100%; padding: .7rem; background: #2563eb; color: white; border: none; border-radius: 8px; font-size: .9rem; cursor: pointer; }
         button:hover { background: #1d4ed8; }
-        .link { margin-top: 1rem; text-align: center; font-size: .875rem; }
-        .link a { color: #2563eb; text-decoration: none; font-weight: 500; }
-        .link a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -35,12 +32,13 @@
         <input type="password" id="password" placeholder="********">
     </div>
     <button onclick="handleLogin()">Sign In</button>
-
-
 </div>
 
 <script>
-    if (localStorage.getItem('token')) window.location.href = '/dashboard.html';
+    // Double check token to avoid loading login screen if already logged in
+    if (localStorage.getItem('token')) {
+        window.location.href = '/dashboard.html';
+    }
 
     async function handleLogin() {
         const email = document.getElementById('email').value;
@@ -54,20 +52,29 @@
             return;
         }
 
-        const data = await apiCall('/login', {
+        // Call our relative auth mapping endpoint
+        const data = await apiCall('/api/auth/login', {
             method: 'POST',
             body: JSON.stringify({ email, password })
         });
 
-        if (data.error) {
-            errEl.textContent = data.error;
+        if (!data || data.error || data.message) {
+            errEl.textContent = data?.error || data?.message || "Invalid credentials.";
             errEl.style.display = 'block';
             return;
         }
 
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        window.location.href = '/dashboard.html';
+        // Save session data safely upon response
+        if (data.token) {
+            localStorage.setItem('token', data.token);
+            if (data.user) {
+                localStorage.setItem('user', JSON.stringify(data.user));
+            }
+            window.location.href = '/dashboard.html';
+        } else {
+            errEl.textContent = "Authentication successful, but no token returned.";
+            errEl.style.display = 'block';
+        }
     }
 </script>
 </body>
