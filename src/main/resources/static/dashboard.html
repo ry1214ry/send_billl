@@ -6,35 +6,207 @@
     <title>Dashboard</title>
     <script src="/js/app.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: system-ui, sans-serif; background: #f1f5f9; }
-        nav { background: #1e293b; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-        nav h2 { font-size: 1.1rem; }
-        nav button { background: #ef4444; color: white; border: none; padding: .5rem 1rem; border-radius: 8px; cursor: pointer; font-size: .8rem; }
-        nav button:hover { background: #dc2626; }
-        .container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
-        .card { background: white; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,.08); padding: 2rem; }
-        .card h1 { font-size: 1.25rem; margin-bottom: 1.5rem; }
-        .info-grid { display: grid; grid-template-columns: 1fr 2fr; gap: .75rem; font-size: .9rem; border-top: 1px solid #e2e8f0; padding-top: 1rem; }
-        .info-grid .label { color: #64748b; font-weight: 500; }
-        .loading { text-align: center; padding: 3rem; color: #64748b; }
-        .warning-banner { color: #b91c1c; background: #fef2f2; padding: 10px; margin-top: 15px; border-radius: 6px; font-size: 0.85rem; border: 1px solid #fca5a5; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #4a4256; /* Subtle dark underlying background showing at the very bottom */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Bar Corporate Styling */
+        .top-bar {
+            background-color: #f1f5f9;
+            border-bottom: 2px solid #002d62;
+            padding: 0.5rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 50px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            color: #002d62;
+            font-size: 1.1rem;
+        }
+
+        .logo-placeholder {
+            border: 2px solid #002d62;
+            padding: 2px 6px;
+            font-weight: 800;
+            margin-right: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .user-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: #1e293b;
+        }
+
+        .user-icon {
+            width: 22px;
+            height: 22px;
+            background: #cbd5e1;
+            border-radius: 50%;
+            display: inline-block;
+            position: relative;
+        }
+
+        /* Small abstract avatar icon style */
+        .user-icon::before {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #64748b;
+            border-radius: 50%;
+            top: 2px;
+            left: 6px;
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: #1e293b;
+            cursor: pointer;
+            font-size: 0.85rem;
+            text-decoration: none;
+            margin-left: 4px;
+        }
+
+        .logout-btn:hover {
+            text-decoration: underline;
+        }
+
+        .divider-pipe {
+            color: #cbd5e1;
+            margin: 0 4px;
+        }
+
+        /* Navigation Tabs Bar */
+        nav {
+            background: #d1d5db;
+            display: flex;
+            align-items: center;
+            padding-left: 24rem; /* Aligns toward center-right as per image layout */
+            height: 45px;
+            border-bottom: 1px solid #9ca3af;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #4b5563;
+            font-size: 0.9rem;
+            padding: 0 1rem;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .nav-link.active {
+            color: #000000;
+            font-weight: bold;
+            border-bottom: 3.5px solid #b91c1c; /* Sharp red indicator block */
+            background: #e5e7eb;
+        }
+
+        .nav-link.disabled {
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        /* Center Main Container Box Layout */
+        .container {
+            flex: 1;
+            width: 100%;
+            padding: 8px;
+            background: #e5e7eb; /* Main inner light grey application canvas background */
+        }
+
+        .card {
+            background: #dbdee2;
+            border: 3px solid #002d62;
+            border-radius: 12px;
+            min-height: calc(100vh - 120px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        /* Congratulations Central Message Typography */
+        .congrats-msg {
+            color: #581c4e; /* Deep maroon/purple text color matching your image layout */
+            font-size: 2.1rem;
+            font-weight: 400;
+            line-height: 1.4;
+            max-width: 800px;
+        }
+
+        .welcome-submsg {
+            margin-top: 0.5rem;
+            display: block;
+        }
+
+        /* Fallback elements styling */
+        .loading { text-align: center; color: #4b5563; font-size: 1.1rem; }
+        .warning-banner { color: #b91c1c; background: #fef2f2; padding: 10px; margin-top: 15px; border-radius: 6px; font-size: 0.85rem; border: 1px solid #fca5a5; max-width: 500px; }
+        .hidden-details { display: none; }
     </style>
 </head>
 <body>
+
+<div class="top-bar">
+    <div class="logo-section">
+        <div class="logo-placeholder">CAR</div> ធនាគារ កម្ពុជា អាស៊ី
+    </div>
+    <div class="user-controls">
+        <div class="user-icon"></div>
+        <span id="topBarUser">ATMUAT</span>
+        <span class="divider-pipe">|</span>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+</div>
+
 <nav>
-    <h2>Send Bill</h2>
-    <button onclick="logout()">Logout</button>
+    <a class="nav-link active">Home</a>
+    <span class="divider-pipe">|</span>
+    <a class="nav-link">Collect Data</a>
+    <span class="divider-pipe">|</span>
+    <a class="nav-link disabled">Send Bill (0)</a>
 </nav>
+
 <div class="container">
     <div class="card">
-        <h1>Welcome, <span id="welcomeName">User</span>!</h1>
-        <div id="loading" class="loading">Loading user profile information...</div>
+        <div id="loading" class="loading">Processing configuration details...</div>
 
-        <div id="userInfo" class="info-grid" style="display:none">
-            <span class="label">User ID:</span><span id="uid"></span>
-            <span class="label">Full Name:</span><span id="uname"></span>
-            <span class="label">Email Address:</span><span id="uemail"></span>
+        <div id="userInfo" style="display:none">
+            <h1 class="congrats-msg">
+                Congratulations, you have logged in successfully!
+                <span class="welcome-submsg">Welcome! Use ATM Run to pay bills and send emails to customers easily.</span>
+            </h1>
+        </div>
+
+        <div class="hidden-details">
+            <span id="welcomeName">User</span>
+            <span id="uid"></span>
+            <span id="uname"></span>
+            <span id="uemail"></span>
         </div>
     </div>
 </div>
@@ -49,26 +221,26 @@
             return;
         }
 
-        // Hit profile resource relative path context
         const data = await apiCall('/api/users/me');
 
-        // Safe Fallback Strategy: If API falls into a 404/403 condition,
-        // display cached login values instead of immediately loop-redirecting.
         if (!data || data.error) {
             console.warn("Profile fetching failed. Reading storage cache backup...");
             document.getElementById('loading').style.display = 'none';
 
             if (savedUser) {
                 const userObj = JSON.parse(savedUser);
-                document.getElementById('userInfo').style.display = 'grid';
-                document.getElementById('welcomeName').textContent = userObj.fullName || userObj.name || "User";
+                document.getElementById('userInfo').style.display = 'block';
+
+                const fallbackUsername = userObj.fullName || userObj.name || "ATMUAT";
+                document.getElementById('topBarUser').textContent = fallbackUsername;
+                document.getElementById('welcomeName').textContent = fallbackUsername;
                 document.getElementById('uid').textContent = userObj.id || "N/A";
-                document.getElementById('uname').textContent = userObj.fullName || userObj.name || "N/A";
+                document.getElementById('uname').textContent = fallbackUsername;
                 document.getElementById('uemail').textContent = userObj.email || "N/A";
 
                 const banner = document.createElement('div');
                 banner.className = "warning-banner";
-                banner.innerHTML = `<strong>Notice:</strong> Profile synchronization issue (${data?.error || 'Endpoint connection failed'}).`;
+                banner.innerHTML = `<strong>Notice:</strong> Sync offline (${data?.error || 'Endpoint connection down'}).`;
                 document.querySelector('.card').appendChild(banner);
             } else {
                 logout();
@@ -76,11 +248,12 @@
             return;
         }
 
-        // Normal render state if apiCall is completely successful
+        // Standard operational render target execution
         document.getElementById('loading').style.display = 'none';
-        document.getElementById('userInfo').style.display = 'grid';
+        document.getElementById('userInfo').style.display = 'block';
 
-        const displayName = data.fullName || data.name || "User";
+        const displayName = data.fullName || data.name || "ATMUAT";
+        document.getElementById('topBarUser').textContent = displayName;
         document.getElementById('welcomeName').textContent = displayName;
         document.getElementById('uid').textContent = data.id || "N/A";
         document.getElementById('uname').textContent = displayName;
