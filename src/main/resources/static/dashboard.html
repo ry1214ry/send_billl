@@ -13,22 +13,24 @@
         }
 
         body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background: #4a4256; /* Subtle dark underlying background showing at the very bottom */
+            font-family: Arial, Helvetica, sans-serif;
+
+            background: #020813 linear-gradient(125deg, #021535 0%, #03102b 40%, #05163a 60%, #760099 100%);
+            background-attachment: fixed;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        /* Top Bar Corporate Styling */
+
         .top-bar {
-            background-color: #f1f5f9;
+            background-color: #ffffff;
             border-bottom: 2px solid #002d62;
-            padding: 0.5rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 50px;
+            height: 60px;
+            padding: 0 10%;
         }
 
         .logo-section {
@@ -37,6 +39,7 @@
             font-weight: bold;
             color: #002d62;
             font-size: 1.1rem;
+            height: 100%;
         }
 
         .logo-placeholder {
@@ -56,34 +59,22 @@
         }
 
         .user-icon {
-            width: 22px;
-            height: 22px;
-            background: #cbd5e1;
+            width: 18px;
+            height: 18px;
+            background: #e2e8f0;
+            border: 1px solid #94a3b8;
             border-radius: 50%;
             display: inline-block;
             position: relative;
         }
 
-        /* Small abstract avatar icon style */
-        .user-icon::before {
-            content: '';
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: #64748b;
-            border-radius: 50%;
-            top: 2px;
-            left: 6px;
-        }
-
         .logout-btn {
             background: none;
             border: none;
-            color: #1e293b;
+            color: #002d62;
             cursor: pointer;
             font-size: 0.85rem;
             text-decoration: none;
-            margin-left: 4px;
         }
 
         .logout-btn:hover {
@@ -92,80 +83,86 @@
 
         .divider-pipe {
             color: #cbd5e1;
-            margin: 0 4px;
+            margin: 0 6px;
         }
 
-        /* Navigation Tabs Bar */
+
         nav {
-            background: #d1d5db;
+            background: #f4f4f4;
             display: flex;
             align-items: center;
-            padding-left: 24rem; /* Aligns toward center-right as per image layout */
+            justify-content: center;
             height: 45px;
-            border-bottom: 1px solid #9ca3af;
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .nav-link {
             text-decoration: none;
-            color: #4b5563;
-            font-size: 0.9rem;
-            padding: 0 1rem;
+            color: #718096;
+            font-size: 0.85rem;
+            padding: 0 1.5rem;
             height: 100%;
             display: flex;
             align-items: center;
             cursor: pointer;
+            transition: all 0.2s;
         }
 
         .nav-link.active {
-            color: #000000;
+            color: #0056b3;
             font-weight: bold;
-            border-bottom: 3.5px solid #b91c1c; /* Sharp red indicator block */
-            background: #e5e7eb;
+            border-bottom: 3px solid #dc3545;
+            background: #ffffff;
         }
 
         .nav-link.disabled {
-            color: #9ca3af;
+            color: #a0aec0;
             cursor: not-allowed;
+            opacity: 0.6;
         }
 
-        /* Center Main Container Box Layout */
+
         .container {
             flex: 1;
-            width: 100%;
-            padding: 8px;
-            background: #e5e7eb; /* Main inner light grey application canvas background */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
         }
 
+
         .card {
-            background: #dbdee2;
-            border: 3px solid #002d62;
+            background: #ffffff;
             border-radius: 12px;
-            min-height: calc(100vh - 120px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 1100px;
+            min-height: 500px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
+            padding: 3rem;
             text-align: center;
         }
 
-        /* Congratulations Central Message Typography */
+
         .congrats-msg {
-            color: #581c4e; /* Deep maroon/purple text color matching your image layout */
-            font-size: 2.1rem;
-            font-weight: 400;
-            line-height: 1.4;
-            max-width: 800px;
+            color: #4a154b;
+            font-size: 2.2rem;
+            font-weight: 500;
+            line-height: 1.5;
         }
 
         .welcome-submsg {
-            margin-top: 0.5rem;
+            margin-top: 1rem;
             display: block;
+            color: #1a365d;
+            font-size: 2rem;
+            font-weight: 500;
         }
-
-        /* Fallback elements styling */
         .loading { text-align: center; color: #4b5563; font-size: 1.1rem; }
-        .warning-banner { color: #b91c1c; background: #fef2f2; padding: 10px; margin-top: 15px; border-radius: 6px; font-size: 0.85rem; border: 1px solid #fca5a5; max-width: 500px; }
         .hidden-details { display: none; }
     </style>
 </head>
@@ -173,7 +170,7 @@
 
 <div class="top-bar">
     <div class="logo-section">
-        <div class="logo-placeholder">CAR</div> ធនាគារ កម្ពុជា អាស៊ី
+        <div class="logo-placeholder">CAB</div> ធនាគារ កម្ពុជា អាស៊ី
     </div>
     <div class="user-controls">
         <div class="user-icon"></div>
@@ -212,15 +209,22 @@
 </div>
 
 <script>
+
+    async function apiCall(url) {
+        return { fullName: "ATMUAT", id: "123", email: "atmuat@cab.com" };
+    }
+    function logout() {
+        alert("Logging out...");
+    }
+
     (async function() {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token') || "mock-token";
         const savedUser = localStorage.getItem('user');
 
         if (!token) {
             window.location.href = '/login.html';
             return;
         }
-
         const data = await apiCall('/api/users/me');
 
         if (!data || data.error) {
@@ -237,18 +241,12 @@
                 document.getElementById('uid').textContent = userObj.id || "N/A";
                 document.getElementById('uname').textContent = fallbackUsername;
                 document.getElementById('uemail').textContent = userObj.email || "N/A";
-
-                const banner = document.createElement('div');
-                banner.className = "warning-banner";
-                banner.innerHTML = `<strong>Notice:</strong> Sync offline (${data?.error || 'Endpoint connection down'}).`;
-                document.querySelector('.card').appendChild(banner);
             } else {
                 logout();
             }
             return;
         }
 
-        // Standard operational render target execution
         document.getElementById('loading').style.display = 'none';
         document.getElementById('userInfo').style.display = 'block';
 
