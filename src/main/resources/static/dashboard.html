@@ -14,7 +14,7 @@
 
         body {
             font-family: Arial, Helvetica, sans-serif;
-            background: #020813 linear-gradient(125deg, #021535 0%, #03102b 40%, #05163a 60%, #760099 100%);
+            background: #000428 linear-gradient(135deg, #020922 0%, #010618 45%, #0d0124 75%, #590382 100%);
             background-attachment: fixed;
             min-height: 100vh;
             display: flex;
@@ -23,68 +23,64 @@
 
         .top-bar {
             background-color: #ffffff;
-            border-bottom: 2px solid #002d62;
+            border-bottom: 2px solid #0056b3;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 65px;
+            height: 70px;
             padding: 0 10%;
         }
 
         .logo-section {
             display: flex;
             align-items: center;
-            font-weight: bold;
-            color: #002d62;
-            font-size: 1.3rem;
             height: 100%;
-            gap: 12px;
         }
 
-        /* Styles the newly added CAB Logo image inside the navbar header */
         .logo-img {
-            height: 45px;
+            height: 50px;
             object-fit: contain;
         }
 
         .user-controls {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 0.9rem;
-            color: #1e293b;
-            font-weight: bold;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: #1a202c;
         }
 
-        /* Displays the ADMINISTRATOR.PNG smoothly wrapped as a circle avatar */
         .user-avatar {
-            width: 35px;
-            height: 35px;
-            border: 1px solid #94a3b8;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             object-fit: cover;
             background: #e2e8f0;
         }
 
+        .username-txt {
+            font-weight: bold;
+            color: #0d1b3e;
+        }
+
         .logout-btn {
-            background: #dc3545;
+            background: none;
             border: none;
-            color: #ffffff;
+            color: #0056b3;
             cursor: pointer;
             font-size: 0.85rem;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-weight: bold;
-            transition: background 0.2s ease;
+            padding: 0;
+            font-weight: normal;
+            text-decoration: none;
         }
 
         .logout-btn:hover {
-            background: #bd2130;
+            text-decoration: underline;
         }
 
         .divider-pipe {
             color: #cbd5e1;
-            margin: 0 6px;
+            margin: 0 4px;
         }
 
         nav {
@@ -92,33 +88,42 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 45px;
+            height: 50px;
             border-bottom: 1px solid #e2e8f0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: inset 0 -1px 3px rgba(0,0,0,0.05);
         }
 
         .nav-link {
             text-decoration: none;
             color: #718096;
-            font-size: 0.85rem;
-            padding: 0 1.5rem;
+            font-size: 0.9rem;
+            padding: 0 1.2rem;
             height: 100%;
             display: flex;
             align-items: center;
             cursor: pointer;
+            position: relative;
             transition: all 0.2s;
         }
 
         .nav-link.active {
-            color: #ffffff;
+            color: #0056b3;
             font-weight: bold;
-            background: #dc3545;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+            width: 80%;
+            height: 3px;
+            background-color: #e53e3e;
         }
 
         .nav-link.disabled {
-            color: #a0aec0;
+            color: #cbd5e1;
             cursor: not-allowed;
-            opacity: 0.6;
         }
 
         .container {
@@ -126,38 +131,160 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 40px 20px;
+            padding: 20px;
         }
 
         .card {
             background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
             width: 100%;
-            max-width: 850px;
-            min-height: 250px;
+            max-width: 1150px;
+            min-height: 540px;
+            display: flex;
+            flex-direction: column;
+            padding: 2.5rem;
+            position: relative;
+        }
+
+        /* --- View 1: Home View Styles --- */
+        .home-view {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 3rem;
+            flex: 1;
             text-align: center;
         }
 
         .congrats-msg {
-            color: #222222;
+            color: #512da8;
             font-size: 2rem;
-            font-weight: bold;
-            line-height: 1.5;
+            font-weight: normal;
+            line-height: 1.4;
         }
 
         .welcome-submsg {
-            margin-top: 1.5rem;
+            margin-top: 0.8rem;
             display: block;
-            color: #760099;
-            font-size: 1.3rem;
-            font-weight: 500;
+            color: #0d47a1;
+            font-size: 1.8rem;
+            font-weight: normal;
         }
+
+        /* --- View 2: Collect Data View Styles --- */
+        .collect-view {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .view-header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .view-title {
+            font-size: 1.8rem;
+            color: #222222;
+            font-weight: normal;
+            flex-grow: 1;
+            text-align: center;
+            padding-left: 180px; /* Balances the center title positioning against the right button */
+        }
+
+        .btn-pdf {
+            background-color: #00bfa5;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            font-size: 0.85rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .filter-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
+            margin-bottom: 2rem;
+            padding-left: 15%;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-group label {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #333333;
+        }
+
+        .input-group input {
+            height: 36px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 0 10px;
+            font-size: 0.85rem;
+            color: #333333;
+            width: 200px;
+        }
+
+        .btn-search {
+            background-color: #e3f2fd;
+            border: 1.5px solid #0077cc;
+            color: #0056b3;
+            height: 36px;
+            padding: 0 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-search:hover {
+            background-color: #d0e8ff;
+        }
+
+        /* Table Styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.5rem;
+        }
+
+        .data-table th {
+            background-color: #0a7eaf;
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: bold;
+            padding: 12px 8px;
+            border: 1px solid #ffffff;
+            text-align: center;
+        }
+
+        .data-table th:first-child {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .data-table td {
+            border: 1px solid #cbd5e1;
+            padding: 20px;
+            text-align: center;
+            color: #718096;
+            font-size: 0.85rem;
+        }
+
         .loading { text-align: center; color: #4b5563; font-size: 1.1rem; }
         .hidden-details { display: none; }
     </style>
@@ -167,37 +294,74 @@
 <div class="top-bar">
     <div class="logo-section">
         <img src="/images/CABlogo.png" alt="CAB Logo" class="logo-img">
-
     </div>
     <div class="user-controls">
         <img src="/images/ADMINISTRATOR.PNG" alt="User Profile" class="user-avatar">
-        <span id="topBarUser">ATMUAT</span>
+        <span id="topBarUser" class="username-txt">ATMUAT</span>
         <span class="divider-pipe">|</span>
         <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
 </div>
 
 <nav>
-    <a class="nav-link active">Home</a>
+    <a class="nav-link active" id="tabHome" onclick="switchTab('home')">Home</a>
     <span class="divider-pipe">|</span>
-    <a class="nav-link">Products</a>
+    <a class="nav-link" id="tabCollect" onclick="switchTab('collect')">Collect Data</a>
     <span class="divider-pipe">|</span>
-    <a class="nav-link">Eastments</a>
-    <span class="divider-pipe">|</span>
-    <a class="nav-link">Payments</a>
-    <span class="divider-pipe">|</span>
-    <a class="nav-link">Help</a>
+    <a class="nav-link disabled">Send Bill (0)</a>
 </nav>
 
 <div class="container">
     <div class="card">
         <div id="loading" class="loading">Processing configuration details...</div>
 
-        <div id="userInfo" style="display:none">
+        <!-- Home Tab Content View -->
+        <div id="userInfo" class="home-view" style="display:none">
             <h1 class="congrats-msg">
                 Congratulations, you have logged in successfully!
                 <span class="welcome-submsg">Welcome! Use ATM Run to pay bills and send emails to customers easily.</span>
             </h1>
+        </div>
+
+        <!-- Collect Data Tab Content View -->
+        <div id="collectDataView" class="collect-view">
+            <div class="view-header-container">
+                <h2 class="view-title">List data billing generate to PDF</h2>
+                <button class="btn-pdf">Generate PDF Statement</button>
+            </div>
+
+            <div class="filter-row">
+                <div class="input-group">
+                    <label>Account Number</label>
+                    <input type="text" placeholder="Account Number...">
+                </div>
+                <div class="input-group">
+                    <label>Invoice Date</label>
+                    <input type="date" value="2026-06-25">
+                </div>
+                <button class="btn-search">Search Data</button>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th><input type="checkbox"> All</th>
+                    <th>Customer</th>
+                    <th>Account</th>
+                    <th>Name</th>
+                    <th>Card</th>
+                    <th>Status</th>
+                    <th>Total Due</th>
+                    <th>Balance</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td colspan="9">No data available. Please search.</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
 
         <div class="hidden-details">
@@ -214,11 +378,30 @@
         return { fullName: "ATMUAT", id: "123", email: "atmuat@cab.com" };
     }
 
-    // Fixed path destination route to open login safely inside Spring Boot context root layout
-    public function logout() {
+    function logout() {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         window.location.href = '/login.html';
+    }
+
+    // Handles view routing logic clean and dynamically between tabs
+    function switchTab(tabName) {
+        const homeTab = document.getElementById('tabHome');
+        const collectTab = document.getElementById('tabCollect');
+        const homeView = document.getElementById('userInfo');
+        const collectView = document.getElementById('collectDataView');
+
+        if (tabName === 'home') {
+            homeTab.classList.add('active');
+            collectTab.classList.remove('active');
+            homeView.style.display = 'flex';
+            collectView.style.display = 'none';
+        } else if (tabName === 'collect') {
+            collectTab.classList.add('active');
+            homeTab.classList.remove('active');
+            homeView.style.display = 'none';
+            collectView.style.display = 'flex';
+        }
     }
 
     (async function() {
@@ -231,26 +414,22 @@
         }
         const data = await apiCall('/api/users/me');
 
-        if (!data || data.error) {
-            console.warn("Profile fetching failed. Reading storage cache backup...");
-            document.getElementById('loading').style.display = 'none';
+        document.getElementById('loading').style.display = 'none';
 
+        // Load configurations into global scope, defaults view to Home standard view
+        if (!data || data.error) {
             if (savedUser) {
                 const userObj = JSON.parse(savedUser);
-                document.getElementById('userInfo').style.display = 'block';
+                switchTab('home');
                 const fallbackUsername = userObj.fullName || userObj.name || "ATMUAT";
                 document.getElementById('topBarUser').textContent = fallbackUsername;
-                document.getElementById('welcomeName').textContent = fallbackUsername;
-                document.getElementById('uid').textContent = userObj.id || "N/A";
-                document.getElementById('uname').textContent = fallbackUsername;
-                document.getElementById('uemail').textContent = userObj.email || "N/A";
             } else {
                 logout();
             }
             return;
         }
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('userInfo').style.display = 'block';
+
+        switchTab('home');
         const displayName = data.fullName || data.name || "ATMUAT";
         document.getElementById('topBarUser').textContent = displayName;
         document.getElementById('welcomeName').textContent = displayName;
