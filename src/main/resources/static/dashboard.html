@@ -14,7 +14,6 @@
 
         body {
             font-family: Arial, Helvetica, sans-serif;
-
             background: #020813 linear-gradient(125deg, #021535 0%, #03102b 40%, #05163a 60%, #760099 100%);
             background-attachment: fixed;
             min-height: 100vh;
@@ -22,14 +21,13 @@
             flex-direction: column;
         }
 
-
         .top-bar {
             background-color: #ffffff;
             border-bottom: 2px solid #002d62;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 60px;
+            height: 65px;
             padding: 0 10%;
         }
 
@@ -38,54 +36,56 @@
             align-items: center;
             font-weight: bold;
             color: #002d62;
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             height: 100%;
+            gap: 12px;
         }
 
-        .logo-placeholder {
-            border: 2px solid #002d62;
-            padding: 2px 6px;
-            font-weight: 800;
-            margin-right: 8px;
-            letter-spacing: 0.5px;
+        /* Styles the newly added CAB Logo image inside the navbar header */
+        .logo-img {
+            height: 45px;
+            object-fit: contain;
         }
 
         .user-controls {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.85rem;
+            gap: 10px;
+            font-size: 0.9rem;
             color: #1e293b;
+            font-weight: bold;
         }
 
-        .user-icon {
-            width: 18px;
-            height: 18px;
-            background: #e2e8f0;
+        /* Displays the ADMINISTRATOR.PNG smoothly wrapped as a circle avatar */
+        .user-avatar {
+            width: 35px;
+            height: 35px;
             border: 1px solid #94a3b8;
             border-radius: 50%;
-            display: inline-block;
-            position: relative;
+            object-fit: cover;
+            background: #e2e8f0;
         }
 
         .logout-btn {
-            background: none;
+            background: #dc3545;
             border: none;
-            color: #002d62;
+            color: #ffffff;
             cursor: pointer;
             font-size: 0.85rem;
-            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background 0.2s ease;
         }
 
         .logout-btn:hover {
-            text-decoration: underline;
+            background: #bd2130;
         }
 
         .divider-pipe {
             color: #cbd5e1;
             margin: 0 6px;
         }
-
 
         nav {
             background: #f4f4f4;
@@ -110,10 +110,9 @@
         }
 
         .nav-link.active {
-            color: #0056b3;
+            color: #ffffff;
             font-weight: bold;
-            border-bottom: 3px solid #dc3545;
-            background: #ffffff;
+            background: #dc3545;
         }
 
         .nav-link.disabled {
@@ -121,7 +120,6 @@
             cursor: not-allowed;
             opacity: 0.6;
         }
-
 
         .container {
             flex: 1;
@@ -131,14 +129,13 @@
             padding: 40px 20px;
         }
 
-
         .card {
             background: #ffffff;
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             width: 100%;
-            max-width: 1100px;
-            min-height: 500px;
+            max-width: 850px;
+            min-height: 250px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -147,19 +144,18 @@
             text-align: center;
         }
 
-
         .congrats-msg {
-            color: #4a154b;
-            font-size: 2.2rem;
-            font-weight: 500;
+            color: #222222;
+            font-size: 2rem;
+            font-weight: bold;
             line-height: 1.5;
         }
 
         .welcome-submsg {
-            margin-top: 1rem;
+            margin-top: 1.5rem;
             display: block;
-            color: #1a365d;
-            font-size: 2rem;
+            color: #760099;
+            font-size: 1.3rem;
             font-weight: 500;
         }
         .loading { text-align: center; color: #4b5563; font-size: 1.1rem; }
@@ -170,10 +166,11 @@
 
 <div class="top-bar">
     <div class="logo-section">
-        <div class="logo-placeholder">CAB</div> ធនាគារ កម្ពុជា អាស៊ី
+        <img src="/images/CABlogo.png" alt="CAB Logo" class="logo-img">
+
     </div>
     <div class="user-controls">
-        <div class="user-icon"></div>
+        <img src="/images/ADMINISTRATOR.PNG" alt="User Profile" class="user-avatar">
         <span id="topBarUser">ATMUAT</span>
         <span class="divider-pipe">|</span>
         <button class="logout-btn" onclick="logout()">Logout</button>
@@ -183,9 +180,13 @@
 <nav>
     <a class="nav-link active">Home</a>
     <span class="divider-pipe">|</span>
-    <a class="nav-link">Collect Data</a>
+    <a class="nav-link">Products</a>
     <span class="divider-pipe">|</span>
-    <a class="nav-link disabled">Send Bill (0)</a>
+    <a class="nav-link">Eastments</a>
+    <span class="divider-pipe">|</span>
+    <a class="nav-link">Payments</a>
+    <span class="divider-pipe">|</span>
+    <a class="nav-link">Help</a>
 </nav>
 
 <div class="container">
@@ -209,12 +210,15 @@
 </div>
 
 <script>
-
     async function apiCall(url) {
         return { fullName: "ATMUAT", id: "123", email: "atmuat@cab.com" };
     }
-    function logout() {
-        alert("Logging out...");
+
+    // Fixed path destination route to open login safely inside Spring Boot context root layout
+    public function logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login.html';
     }
 
     (async function() {
@@ -234,7 +238,6 @@
             if (savedUser) {
                 const userObj = JSON.parse(savedUser);
                 document.getElementById('userInfo').style.display = 'block';
-
                 const fallbackUsername = userObj.fullName || userObj.name || "ATMUAT";
                 document.getElementById('topBarUser').textContent = fallbackUsername;
                 document.getElementById('welcomeName').textContent = fallbackUsername;
@@ -246,10 +249,8 @@
             }
             return;
         }
-
         document.getElementById('loading').style.display = 'none';
         document.getElementById('userInfo').style.display = 'block';
-
         const displayName = data.fullName || data.name || "ATMUAT";
         document.getElementById('topBarUser').textContent = displayName;
         document.getElementById('welcomeName').textContent = displayName;

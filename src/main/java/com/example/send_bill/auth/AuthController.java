@@ -20,9 +20,10 @@ public class AuthController {
         this.authService = authService;
     }
 
-
     @PostMapping("/register")
+
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
+
         try {
             AuthResponse response = authService.register(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -40,6 +41,7 @@ public class AuthController {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
+
 
     @GetMapping("/me")
     public ResponseEntity<?> me(@AuthenticationPrincipal User user) {

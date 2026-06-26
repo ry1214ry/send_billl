@@ -41,9 +41,10 @@ public class SecurityConfig {
                                 "/register.html",
                                 "/dashboard.html",
                                 "/js/**",
-                                "/css/**"
+                                "/css/**",
+                                "/images/**"
                         ).permitAll()
-                        // All other application routes (like /api/auth/me) require authentication
+
                         .anyRequest().authenticated()
                 )
 

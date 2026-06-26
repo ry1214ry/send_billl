@@ -22,7 +22,6 @@ async function apiCall(endpoint, options = {}) {
 
         if (res.status === 401 || res.status === 403) {
             console.error(`Security Warning: Server returned status code ${res.status} for endpoint: ${endpoint}`);
-
             return { error: `Server returned HTTP Status ${res.status}` };
         }
 
