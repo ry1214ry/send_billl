@@ -153,7 +153,8 @@
 </div>
 
 <script>
-    if (localStorage.getItem('token')) {
+    // Check tab-specific session storage instead of global localStorage
+    if (sessionStorage.getItem('token')) {
         window.location.href = '/dashboard.html';
     }
 
@@ -181,9 +182,10 @@
         }
 
         if (data.token) {
-            localStorage.setItem('token', data.token);
+
+            sessionStorage.setItem('token', data.token);
             if (data.user) {
-                localStorage.setItem('user', JSON.stringify(data.user));
+                sessionStorage.setItem('user', JSON.stringify(data.user));
             }
             window.location.href = '/dashboard.html';
         } else {

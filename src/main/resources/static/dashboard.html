@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <script src="/js/app.js"></script>
+
+
     <style>
         * {
             margin: 0;
@@ -288,6 +290,8 @@
         .loading { text-align: center; color: #4b5563; font-size: 1.1rem; }
         .hidden-details { display: none; }
     </style>
+
+
 </head>
 <body>
 
@@ -375,16 +379,18 @@
 
 <script>
     async function apiCall(url) {
+        // Replace this with your actual fetch call when connecting to Spring Boot
         return { fullName: "ATMUAT", id: "123", email: "atmuat@cab.com" };
     }
 
+    // Fixed JavaScript syntax to handle clearing storage properly on logout
     function logout() {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('token'); // Changed to sessionStorage
+        sessionStorage.removeItem('user');  // Changed to sessionStorage
         window.location.href = '/login.html';
     }
 
-    // Handles view routing logic clean and dynamically between tabs
+    // Handles view routing logic cleanly and dynamically between tabs
     function switchTab(tabName) {
         const homeTab = document.getElementById('tabHome');
         const collectTab = document.getElementById('tabCollect');
@@ -405,18 +411,21 @@
     }
 
     (async function() {
-        const token = localStorage.getItem('token') || "mock-token";
-        const savedUser = localStorage.getItem('user');
+        // Read from tab-specific storage context
+        const token = sessionStorage.getItem('token');
+        const savedUser = sessionStorage.getItem('user');
 
         if (!token) {
             window.location.href = '/login.html';
             return;
         }
-        const data = await apiCall('/api/users/me');
 
+
+
+        const data = await apiCall('/api/users/me');
         document.getElementById('loading').style.display = 'none';
 
-        // Load configurations into global scope, defaults view to Home standard view
+        // Load configurations into layout scope, defaults view to Home standard view
         if (!data || data.error) {
             if (savedUser) {
                 const userObj = JSON.parse(savedUser);
