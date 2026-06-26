@@ -130,6 +130,7 @@
     </style>
 
 
+
 </head>
 <body>
 
@@ -148,16 +149,13 @@
         </div>
         <button onclick="handleLogin()">Login</button>
     </div>
-
     <div class="visual-side"></div>
 </div>
-
 <script>
-    // Check tab-specific session storage instead of global localStorage
+
     if (sessionStorage.getItem('token')) {
         window.location.href = '/dashboard.html';
     }
-
     async function handleLogin() {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
