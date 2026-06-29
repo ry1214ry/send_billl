@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ATM Send Bill Login</title>
-    <script src="/js/app.js"></script>
+    <script src="js/app.js"></script>
 
     <style>
         * {
@@ -105,11 +105,10 @@
             background: #f5f5f5;
         }
 
-
         .visual-side {
             flex: 1;
-            /* Added the leading forward slash for proper Spring Boot server routing */
-            background-image: url('/images/login.jpg');
+            /* Relative path works cleanly in CSS */
+            background-image: url('images/login.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -136,27 +135,33 @@
     <div class="form-side">
         <h1>ATM Send Bill Login</h1>
         <div id="error" class="error"></div>
-
         <div class="field">
             <label for="email">Email</label>
             <input type="email" id="email" placeholder="Enter email">
         </div>
-
         <div class="field">
             <label for="password">Password</label>
             <input type="password" id="password" placeholder="Enter password">
         </div>
-
         <button onclick="handleLogin()">Login</button>
     </div>
-
     <div class="visual-side"></div>
 </div>
-
 <script>
-    // Check tab-specific session storage instead of global localStorage
+    // DYNAMIC PATH DETECTOR: Automatically extracts "/send_bill-0.0.1-SNAPSHOT" from your URL
+    const getContextPath = () => {
+        const path = window.location.pathname;
+        const base = path.split('/')[1];
+        // If running in root (like local IDE), return empty string, otherwise return "/contextName"
+        if (!base || base.includes('.') && !base.includes('SNAPSHOT')) return '';
+        return '/' + base;
+    };
+
+    const contextPath = getContextPath();
+
+    // Check token and redirect using absolute dynamic context paths
     if (sessionStorage.getItem('token')) {
-        window.location.href = '/dashboard.html';
+        window.location.href = contextPath + '/dashboard.html';
     }
 
     async function handleLogin() {
@@ -171,7 +176,10 @@
             return;
         }
 
-        const data = await apiCall('/api/auth/login', {
+        // Formats exactly to: /send_bill-0.0.1-SNAPSHOT/api/auth/login
+        const targetUrl = contextPath + '/api/auth/login';
+
+        const data = await apiCall(targetUrl, {
             method: 'POST',
             body: JSON.stringify({ email, password })
         });
@@ -183,12 +191,12 @@
         }
 
         if (data.token) {
-
             sessionStorage.setItem('token', data.token);
             if (data.user) {
                 sessionStorage.setItem('user', JSON.stringify(data.user));
             }
-            window.location.href = '/dashboard.html';
+
+            window.location.href = contextPath + '/dashboard.html';
         } else {
             errEl.textContent = "Authentication successful, but no token returned.";
             errEl.style.display = 'block';

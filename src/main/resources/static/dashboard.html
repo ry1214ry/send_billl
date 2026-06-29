@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <script src="/js/app.js"></script>
-
+    <script src="js/app.js"></script>
 
     <style>
         * {
@@ -194,7 +193,7 @@
             font-weight: normal;
             flex-grow: 1;
             text-align: center;
-            padding-left: 180px; /* Balances the center title positioning against the right button */
+            padding-left: 180px;
         }
 
         .btn-pdf {
@@ -291,16 +290,15 @@
         .hidden-details { display: none; }
     </style>
 
-
 </head>
 <body>
 
 <div class="top-bar">
     <div class="logo-section">
-        <img src="/images/CABlogo.png" alt="CAB Logo" class="logo-img">
+        <img src="images/CABlogo.png" alt="CAB Logo" class="logo-img">
     </div>
     <div class="user-controls">
-        <img src="/images/ADMINISTRATOR.PNG" alt="User Profile" class="user-avatar">
+        <img src="images/ADMINISTRATOR.PNG" alt="User Profile" class="user-avatar">
         <span id="topBarUser" class="username-txt">ATMUAT</span>
         <span class="divider-pipe">|</span>
         <button class="logout-btn" onclick="logout()">Logout</button>
@@ -319,7 +317,6 @@
     <div class="card">
         <div id="loading" class="loading">Processing configuration details...</div>
 
-        <!-- Home Tab Content View -->
         <div id="userInfo" class="home-view" style="display:none">
             <h1 class="congrats-msg">
                 Congratulations, you have logged in successfully!
@@ -327,7 +324,6 @@
             </h1>
         </div>
 
-        <!-- Collect Data Tab Content View -->
         <div id="collectDataView" class="collect-view">
             <div class="view-header-container">
                 <h2 class="view-title">List data billing generate to PDF</h2>
@@ -378,19 +374,28 @@
 </div>
 
 <script>
+    // DYNAMIC CONTEXT DETECTION: Resolves paths cleanly for "/send_bill-0.0.1-SNAPSHOT"
+    const getContextPath = () => {
+        const path = window.location.pathname;
+        const base = path.split('/')[1];
+        if (!base || (base.includes('.') && !base.includes('SNAPSHOT'))) return '';
+        return '/' + base;
+    };
+
+    const contextPath = getContextPath();
+
     async function apiCall(url) {
-        // Replace this with your actual fetch call when connecting to Spring Boot
+        // Replace this template mapping with your real fetch method when connecting to Spring Boot
         return { fullName: "ATMUAT", id: "123", email: "atmuat@cab.com" };
     }
 
-    // Fixed JavaScript syntax to handle clearing storage properly on logout
     function logout() {
-        sessionStorage.removeItem('token'); // Changed to sessionStorage
-        sessionStorage.removeItem('user');  // Changed to sessionStorage
-        window.location.href = '/login.html';
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('user');
+        // FIXED: Prefixed with contextPath so logout takes you right back to login page
+        window.location.href = contextPath + '/login.html';
     }
 
-    // Handles view routing logic cleanly and dynamically between tabs
     function switchTab(tabName) {
         const homeTab = document.getElementById('tabHome');
         const collectTab = document.getElementById('tabCollect');
@@ -411,21 +416,19 @@
     }
 
     (async function() {
-        // Read from tab-specific storage context
         const token = sessionStorage.getItem('token');
         const savedUser = sessionStorage.getItem('user');
 
         if (!token) {
-            window.location.href = '/login.html';
+            // FIXED: Added contextual path configuration guard
+            window.location.href = contextPath + '/login.html';
             return;
         }
 
-
-
-        const data = await apiCall('/api/users/me');
+        // FIXED: Combined absolute API path configuration mapping
+        const data = await apiCall(contextPath + '/api/users/me');
         document.getElementById('loading').style.display = 'none';
 
-        // Load configurations into layout scope, defaults view to Home standard view
         if (!data || data.error) {
             if (savedUser) {
                 const userObj = JSON.parse(savedUser);
